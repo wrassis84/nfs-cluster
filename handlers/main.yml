@@ -1,2 +1,6 @@
 ---
-# handlers file for nfs-cluster
+- name: Restart NFS server
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: restarted
+...
