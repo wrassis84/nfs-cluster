@@ -1,0 +1,45 @@
+---
+- name: Setup a shared filesystem on NFS server
+  hosts: nfs_server
+  become: true
+
+  tasks:
+    - name: Install NFS server packages
+      ansible.builtin.apt:
+        name:
+          - nfs-kernel-server
+        update_cache: true
+        state: present
+    
+    - name: Create an EXT4 filesystem on /dev/sdb
+      community.general.filesystem:
+        fstype: ext4
+        dev: /dev/sdb
+
+    - name: Mount /dev/sdb on /mnt/nfs_share
+      ansible.posix.mount:
+        src: /dev/sdb
+        path: "/mnt/nfs_share"
+        fstype: ext4
+        opts: rw,sync
+        state: mounted
+
+    - name: Ensure mountpoint exists
+      ansible.builtin.file:
+        path: "/mnt/nfs_share"
+        state: directory
+        mode: '0777'
+        owner: nobody
+        group: nogroup
+
+    - name: Copy /etc/exports
+      ansible.builtin.template:
+        src: exports.j2
+        dest: "/etc/exports"
+        owner: "root"
+        group: "root"
+
+    - name: Update nfs exports
+      ansible.builtin.command: exportfs -a
+      notify: Restart nfs server
+...
