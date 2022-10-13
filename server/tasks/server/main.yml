@@ -41,5 +41,5 @@
 
     - name: Update nfs exports
       ansible.builtin.command: exportfs -a
-      notify: Restart nfs server
+      notify: Restart NFS server
 ...
