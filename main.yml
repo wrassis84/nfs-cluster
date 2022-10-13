@@ -1,6 +1,32 @@
 ---
+- name: Use role main file
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - debug:
+        msg: "Starting NFS server deployment!"
+
 - name: Configure NFS servers
-  hosts: nfs_servers
+  hosts: nfs_server
   roles:
-    - nfs
+    - server
+
+  post_tasks:
+    - debug:
+        msg: "The NFS server was deployed successfully!"
+
+
+  pre_tasks:
+    - debug:
+        msg: "Starting NFS clients deployment!"
+
+- name: Configure NFS clients
+  hosts: nfs_clients
+  roles:
+    - clients
+  
+  post_tasks:
+    - debug:
+        msg: "The NFS clients were deployed successfully!"
 ...
