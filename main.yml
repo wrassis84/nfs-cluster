@@ -24,7 +24,7 @@
 - name: Configure NFS clients
   hosts: nfs_clients
   roles:
-    - clients
+    - client
   
   post_tasks:
     - debug:
