@@ -1,25 +1,41 @@
 ---
-  - name: Install NFS client packages
-    ansible.builtin.apt:
-      name:
-        - nfs-common
-      state: present
-      update_cache: true
+- name: Install NFS client packages
+  ansible.builtin.apt:
+    name:
+     - nfs-common
+    state: present
+    update_cache: true
 
-  - name: Create mountable directory
-    ansible.builtin.file:
-      path: "/mnt/nfs_clientshare"
-      state: directory
-      mode: '777'
-      owner: 'root'
-      group: 'root'
+######################################################################
+# Credits:
+# https://www.decodingdevops.com/ansible-create-directory-if-not-exists/
+- name: Ansible check client shared directory
+  ansible.builtin.stat:
+    path: /mnt/nfs_clientshare
+  register: check_client_share
 
-  - name: Mount network share
-    ansible.posix.mount:
-      src: "192.168.0.230:/mnt/nfs_share"
-      path: "/mnt/nfs_clientshare"
-      fstype: nfs
-      opts: 'rw,sync,hard'
-      state: mounted
-    tags: net_share
+- name: Echo if directory already existed
+  ansible.builtin.debug:
+    msg: "The clients shared directory is already existed!"
+  when: check_client_share.stat.exists
+
+- name: Creates clients shared directory only if no exists
+  ansible.builtin.file:
+    path: "/mnt/nfs_clientshare"
+    state: directory
+    mode: '777'
+    owner: 'root'
+    group: 'root'
+  when: check_client_share.stat.exists == false
+    
+######################################################################
+
+- name: Mounts clients network share
+  ansible.posix.mount:
+    src: "192.168.0.230:/mnt/nfs_share"
+    path: "/mnt/nfs_clientshare"
+    fstype: nfs
+    opts: 'rw,sync,hard'
+    state: mounted
+  tags: net_share
 ...
