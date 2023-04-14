@@ -4,7 +4,7 @@
   become: true
 
   pre_tasks:
-    - debug:
+    - ansible.builtin.debug:
         msg: "Starting NFS server deployment!"
 
 - name: Configure NFS servers
@@ -13,20 +13,20 @@
     - server
 
   post_tasks:
-    - debug:
+    - ansible.builtin.debug:
         msg: "The NFS server was deployed successfully!"
 
 
   pre_tasks:
-    - debug:
+    - ansible.builtin.debug:
         msg: "Starting NFS clients deployment!"
 
 - name: Configure NFS clients
   hosts: nfs_clients
   roles:
     - client
-  
+
   post_tasks:
-    - debug:
+    - ansible.builtin.debug:
         msg: "The NFS clients were deployed successfully!"
 ...
