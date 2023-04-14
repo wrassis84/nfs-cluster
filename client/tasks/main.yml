@@ -32,10 +32,10 @@
 
 - name: Mounts clients network share
   ansible.posix.mount:
-    src: "192.168.0.230:/mnt/nfs_share"
+    src: 192.168.0.230:/mnt/nfs_share
     path: "/mnt/nfs_clientshare"
     fstype: nfs
-    opts: 'rw,sync,hard'
+    opts: rw,sync,hard
     state: mounted
-  tags: net_share
+  tags: mount_clientshare
 ...
