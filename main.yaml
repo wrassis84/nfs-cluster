@@ -16,7 +16,6 @@
     - ansible.builtin.debug:
         msg: "The NFS server was deployed successfully!"
 
-
   pre_tasks:
     - ansible.builtin.debug:
         msg: "Starting NFS clients deployment!"
