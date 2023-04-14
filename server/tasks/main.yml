@@ -5,6 +5,22 @@
       - nfs-kernel-server
     update_cache: true
     state: present
+  register: install_nfs_server
+
+- name: Remove apt lock files
+# Fix 'Couldn't get lock /var/lib/dpkg/lock'(Ubuntu)- https://snip.ly/j6oqr9
+# Como corrigir os erros /var/lib/dpkg/lock ou o could not get lock
+# /var/lib/dpkg/lock-frontend -> https://snip.ly/lfjor5
+  ansible.builtin.file:
+    path:
+      - /var/lib/dpkg/lock
+      - /var/lib/apt/lists/lock
+      - var/cache/apt/archives/lock
+    state: absent
+  #when: '"FAILED" in install_nfs_server'
+  until: '"FAILED" not in install_nfs_server'
+  retries: 5
+  delay: 10
 
 - name: Create an EXT4 filesystem on /dev/sdb
   community.general.filesystem:
