@@ -25,7 +25,7 @@ echo "Configuring environment..."
 source .env && cd - > /dev/null
 
 echo "Playing nfs-sharing role..."
-ansible-playbook main.yaml -u sysadmin -b #> /dev/null
+ansible-playbook ./main.yml -u sysadmin -b #> /dev/null
 ######## MAIN CODE - END #######################################################
 # TODO:
 # Test if ansible is installed;

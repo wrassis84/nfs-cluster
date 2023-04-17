@@ -1,12 +1,31 @@
-# /etc/exports: the access control list for filesystems which may be exported
+#/etc/exports: the access control list for filesystems which may be exported
 #               to NFS clients. See exports(5).
 #
-# Example for NFSv2 and NFSv3:
-# /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
+### Example for NFSv2 and NFSv3:
+#/srv/home   host1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
 #
-# Example for NFSv4:
-# /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
-# /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
+### Example for NFSv4:
+#/srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
+#/srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 #/mnt/nfs_share     192.168.0.230/24(rw,sync,no_root_squash,no_subtree_check)
-/mnt/nfs_share     192.168.0.230/24(rw,sync,no_subtree_check)
+
+# Como configurar uma montagem NFS no Ubuntu 20.04 -> https://snip.ly/127pxm
+# rw:          permite ao cliente permissões de leitura  e  gravação  no volume.
+# sync:        obriga o NFS a gravar alterações    no  disco antes de responder.
+#              resulta num ambiente mais estável/consistente, mas também reduz a
+#              velocidade das operações de arquivos.
+# no_subtree_check: impede a verificação    de   subárvore,     onde o host deve
+#                   verificar se o arquivo está de fato disponível     na árvore
+#                   exportada para cada pedido. Isso pode    causar    problemas
+#                   quando um arquivo é renomeado    enquanto o    cliente o tem
+#                   aberto. Em quase todos   os   casos, é    melhor desativar a
+#                   verificação de subárvore.
+# no_root_squash:   por padrão, o NFS traduz as solicitações de um usuário root
+#                   remotamente como um usuário sem     privilégios no servidor.
+#                   Isso foi usado como medida de segurança  para evitar que uma
+#                   conta root no cliente utilize o sistema  de arquivos do host
+#                   como root.
+#                   A opção 'no_root_squash' desativa esse    comportamento para
+#                   certos compartilhamentos.
+/mnt/nfs_share     192.168.0.230/24(rw,sync,no_root_squash,no_subtree_check)

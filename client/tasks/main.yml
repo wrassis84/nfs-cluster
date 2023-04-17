@@ -31,7 +31,7 @@
 ######################################################################
 
 - name: Mounts clients network share
-  mount:
+  ansible.posix.mount:
     src: "192.168.0.230:/mnt/nfs_share"
     path: "/mnt/nfs_clientshare"
     fstype: nfs
@@ -40,4 +40,21 @@
     passno: 0
     state: mounted
   tags: mount_clientshare
+
+- name: Check clients network share
+  ansible.builtin.shell:
+    cmd: df -Th
+  with_inventory_hostnames:
+    - 192.168.0.231
+    - 192.168.0.232
+  register: filesystem_mounted
+  tags: check_client_share
+
+- name: Verify if clients sharing is mounted
+  when: '"192.168.0.230:/mnt/nfs_share" in filesystem_mounted'
+  with_inventory_hostnames:
+    - 192.168.0.231
+    - 192.168.0.232
+  debug:
+    msg: "The shared network is working on NFS servers"
 ...
