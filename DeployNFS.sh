@@ -8,9 +8,9 @@
 # Author          : William Ramos de Assis Rezende
 # Maintainer      : William Ramos de Assis Rezende
 #
-# Deploy.sh       : Executes Ansible Playbooks to Deploy Servers.
+# Deploy.sh       : Executes Ansible Playbooks to Deploy NFS Servers/Clients.
 # Requirements    : bash, ansible
-# Usage           : ./Deploy.sh
+# Usage           : ./DeployNFS.sh
 
 ######## TESTING ENVIRONMENT ###################################################
 
@@ -21,11 +21,12 @@
 ######## FUNCTIONS #############################################################
 
 ######## MAIN CODE - START #####################################################
-echo "Configuring environment..."
-source .env && cd - > /dev/null
+echo "Configuring ansible environment..."
+source ansible.env > /dev/null
 
 echo "Playing nfs-sharing role..."
-ansible-playbook ./main.yml -u sysadmin -b #> /dev/null
+cd $PWD
+ansible-playbook main.yml -u sysadmin -b #> /dev/null
 ######## MAIN CODE - END #######################################################
 # TODO:
 # Test if ansible is installed;
