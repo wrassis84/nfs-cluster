@@ -4,8 +4,12 @@
   become: true
 
   pre_tasks:
-    - ansible.builtin.debug:
+    - name: Deploy NFS Server
+      ansible.builtin.debug:
         msg: "Starting NFS server deployment!"
+
+    # - ansible.builtin.debug:
+    #     msg: "Starting NFS server deployment!"
 
 - name: Configure NFS servers
   hosts: nfs_server
